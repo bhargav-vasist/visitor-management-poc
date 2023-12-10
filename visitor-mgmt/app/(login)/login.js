@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Layout, Input, Button, Text } from '@ui-kitten/components';
 import { Link } from 'expo-router';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebaseConfig';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const auth = getAuth()
 
     const handleLogin = async () => {
         try {

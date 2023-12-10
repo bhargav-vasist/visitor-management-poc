@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, KeyboardTypeOptions } from 'react-native';
 import { Layout, Input, Button } from '@ui-kitten/components';
 
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import useAuth from '../../hooks/useAuth';
-
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
+
 const SignUp = () => {
-    // const auth = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -30,8 +28,12 @@ const SignUp = () => {
         if (!isValid) return;
 
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCred = await createUserWithEmailAndPassword(auth, email, password);
             // Handle successful sign-up
+            const updateStat = await updateProfile(userCred.user, {
+                displayName: name
+            })
+            console.log("Updated User Profile", updateStat)
 
         } catch (error) {
             // Handle sign-up error
