@@ -22,7 +22,14 @@ export default function HomeLayout() {
                 name="home"
                 options={{
                     title: 'Home',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />
+                }}
+            />
+            <Tabs.Screen
+                name="profile"
+                options={{
+                    title: 'Profile',
+                    tabBarIcon: ({ color }) => <Ionicons name="person-circle" size={28} color={color} />,
                     headerRight: () => (
                         // <Link href="/modal" asChild>
                         <Pressable onPress={() => signOut(auth)}>
@@ -35,13 +42,6 @@ export default function HomeLayout() {
                         </Pressable>
                         // </Link>
                     ),
-                }}
-            />
-            <Tabs.Screen
-                name="profile"
-                options={{
-                    title: 'Profile',
-                    tabBarIcon: ({ color }) => <Ionicons name="person-circle" size={28} color={color} />,
                 }}
             />
         </Tabs>
