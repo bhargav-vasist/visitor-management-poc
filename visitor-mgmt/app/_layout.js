@@ -50,7 +50,6 @@ function RootLayoutNav() {
   const { currentUser, loading } = useAuth()
   const router = useRouter()
 
-  console.log("Huh")
   useEffect(() => {
     if (currentUser) {
       // User is signed in, see docs for a list of available properties

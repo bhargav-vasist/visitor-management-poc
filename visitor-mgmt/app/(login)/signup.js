@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, KeyboardTypeOptions } from 'react-native';
 import { Layout, Input, Button } from '@ui-kitten/components';
 
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
+import PhoneInput from 'react-native-phone-number-input';
+import { createUserProfile } from '../../services/network/users';
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [callingCode, setCallingCode] = useState('+1');
     const [isValid, setIsValid] = useState(false);
+    const phoneInput = useRef(null);
 
     useEffect(() => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        // const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/; // US phone number format: (XXX) XXX-XXXX
         const isEmailValid = emailRegex.test(email);
-        const isPhoneValid = true
-        // phoneRegex.test(phoneNumber);
+        const isPhoneValid = phoneInput?.current?.isValidNumber(phoneNumber)
         const isPasswordValid = password.length > 6; // Simple validation for password length
         const isNameValid = name.length > 0;
 
@@ -26,15 +28,19 @@ const SignUp = () => {
 
     const handleSignUp = async () => {
         if (!isValid) return;
-
         try {
             const userCred = await createUserWithEmailAndPassword(auth, email, password);
             // Handle successful sign-up
-            const updateStat = await updateProfile(userCred.user, {
+            await updateProfile(userCred.user, {
                 displayName: name
             })
-            console.log("Updated User Profile", updateStat)
-
+            await createUserProfile({
+                userID: userCred.user.uid,
+                name: name,
+                phone: phoneNumber,
+                email: email,
+                callingCode: callingCode
+            })
         } catch (error) {
             // Handle sign-up error
             console.error(error);
@@ -49,6 +55,7 @@ const SignUp = () => {
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 style={styles.input}
+                autoCapitalize={'none'}
             />
             <Input
                 placeholder="Password*"
@@ -63,12 +70,20 @@ const SignUp = () => {
                 onChangeText={setName}
                 style={styles.input}
             />
-            <Input
-                placeholder="Phone Number* (e.g. (123) 456-7890)"
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-                keyboardType="phone-pad"
-                style={styles.input}
+            <PhoneInput
+                ref={phoneInput}
+                defaultValue={phoneNumber}
+                defaultCode="US"
+                layout="first"
+                onChangeText={(text) => {
+                    setPhoneNumber(text);
+                }}
+                onChangeCountry={(country) => {
+                    setCallingCode("+" + country.callingCode[0])
+                }}
+                withShadow
+                autoFocus
+                containerStyle={{ marginVertical: 8, width: '100%' }}
             />
             <Button onPress={handleSignUp} disabled={!isValid}>
                 Sign Up
