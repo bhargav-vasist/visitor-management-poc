@@ -1,4 +1,4 @@
-import { addDocument, updateDocument, getDocument } from "./firebaseManager"
+import { addDocument, updateDocument, getDocument } from "./firestoreManager"
 
 export const createUserProfile = async ({ userID, name, phone, email, callingCode }) => {
     await addDocument({

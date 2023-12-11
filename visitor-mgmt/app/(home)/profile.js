@@ -13,8 +13,8 @@ export default function ProfileScreen() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [callingCode, setCallingCode] = useState('+1');
-  const [cca, setCca] = useState(calling_codes[callingCode]);
+  const [callingCode, setCallingCode] = useState(null);
+  const [cca, setCca] = useState(calling_codes[callingCode] || null);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -74,17 +74,20 @@ export default function ProfileScreen() {
         placeholder="Email"
         editable={isEditing}
       />
-      <PhoneInput
-        ref={phoneInput}
-        defaultValue={phoneNumber}
-        defaultCode={cca}
-        layout="first"
-        onChangeFormattedText={setPhoneNumber}
-        withShadow
-        containerStyle={styles.input}
-        textContainerStyle={{ paddingVertical: 0 }}
-        disabled={!isEditing}
-      />
+      {
+        phoneNumber &&
+        <PhoneInput
+          ref={phoneInput}
+          defaultValue={phoneNumber}
+          defaultCode={cca}
+          layout="first"
+          onChangeFormattedText={setPhoneNumber}
+          withShadow
+          containerStyle={styles.input}
+          textContainerStyle={{ paddingVertical: 0 }}
+          disabled={!isEditing}
+        />
+      }
       {isEditing ? (
         <Button title="Save Changes" onPress={handleSave} />
       ) : (
