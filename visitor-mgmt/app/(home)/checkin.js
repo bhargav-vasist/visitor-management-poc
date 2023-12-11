@@ -37,7 +37,7 @@ const CheckIn = () => {
     };
 
     const pickImage = async () => {
-        // Code for picking an image
+        // TODO: - Code for picking an image
     };
 
     return (
