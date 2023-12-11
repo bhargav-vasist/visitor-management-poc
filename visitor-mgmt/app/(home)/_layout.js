@@ -6,6 +6,8 @@ import Colors from '../../constants/Colors';
 import { Text } from '@ui-kitten/components';
 import { auth } from '../../firebaseConfig';
 import { signOut } from 'firebase/auth'
+import { AntDesign } from '@expo/vector-icons';
+
 function TabBarIcon(props) {
     return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
@@ -23,6 +25,20 @@ export default function HomeLayout() {
                 options={{
                     title: 'Home',
                     tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />
+                }}
+            />
+            <Tabs.Screen
+                name="checkin"
+                options={{
+                    title: 'Check-In',
+                    tabBarIcon: ({ color }) => <AntDesign name="login" size={28} color={color} style={{ marginBottom: -3 }} />
+                }}
+            />
+            <Tabs.Screen
+                name="checkout"
+                options={{
+                    title: 'Check-Out',
+                    tabBarIcon: ({ color }) => <AntDesign name="logout" size={28} color={color} style={{ marginBottom: -3 }} />
                 }}
             />
             <Tabs.Screen
